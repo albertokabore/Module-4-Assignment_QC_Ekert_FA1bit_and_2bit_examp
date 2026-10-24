@@ -28,7 +28,7 @@ def write_word_report(story, destination, author):
     normal.paragraph_format.space_after = Pt(9)
     normal.paragraph_format.line_spacing = Pt(14)
     props = document.core_properties
-    props.title = "4-bit Quantum Ripple-Carry Adder"
+    props.title = "4-Bit Adder in Qiskit"
     props.subject = "Module 4: Qiskit code, simulator test cases, and histograms"
     props.author = props.last_modified_by = author
     props.comments = ""
@@ -114,7 +114,13 @@ def write_word_report(story, destination, author):
             paragraph.paragraph_format.line_spacing = 1.0
             paragraph.paragraph_format.space_after = Pt(10)
             paragraph.paragraph_format.keep_together = True
-            paragraph.paragraph_format.keep_with_next = True
+            following = next(
+                (other for other in story[item_index + 1:]
+                 if not isinstance(other, Spacer)), None
+            )
+            paragraph.paragraph_format.keep_with_next = (
+                isinstance(following, Paragraph) and following.text == "Observations"
+            )
             paragraph.add_run().add_picture(
                 io.BytesIO(item.notebook_png),
                 width=Pt(item.drawWidth),
